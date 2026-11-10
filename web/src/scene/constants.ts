@@ -1,6 +1,6 @@
 export const CASE_W = 4.4
-export const CASE_D = 0.8
-export const LEVEL_H = 1.1
+export const CASE_D = 0.48
+export const LEVEL_H = 0.62
 
 /** The public hall. The entrance door is cut into the west wall (x = minX). */
 export const HALL = { minX: -13, maxX: 13, minZ: -7.2, maxZ: 7.2, height: 6.5 }

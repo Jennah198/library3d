@@ -1,8 +1,9 @@
-import { Billboard, Stars } from '@react-three/drei'
+import { Billboard } from '@react-three/drei'
 import { useEffect, useMemo } from 'react'
 import * as THREE from 'three'
 import { ArchNiche, Column, Cypress, Entablature, Lantern, Planter } from './Architecture'
 import { P, useTex } from './art'
+import { usePBR, useRelief } from './pbr'
 import { DOOR_H, DOOR_W, HALL, WALL_X } from './constants'
 import { Label3D } from './Label3D'
 
@@ -24,14 +25,16 @@ function rect(x0: number, y0: number, x1: number, y1: number) {
 }
 
 /**
- * The library's temple front, seen from the garden at dusk: a stone facade with an arched
- * doorway, four Ionic columns, a pediment carrying the name, cypresses and a crescent moon.
+ * The library's temple front, seen from the garden at golden hour: a stone facade with an arched
+ * doorway, four Ionic columns, a pediment carrying the name, cypresses and a low sun in the mist.
  * Built in the facade's own frame: local x runs along the wall (world +z), local +z points out.
  */
 export function Exterior() {
   const stone = useTex('stone', 0.5, 0.5)
-  const moon = useTex('moon')
+  const sunGlow = useTex('haze')
+  const stoneRelief = useRelief('stone', 4, 0.5, 0.5)
   const path = useTex('stone', 6.25, 1.5)
+  const porch = usePBR('marbleFloor', 3.4, 1.6)
 
   const geo = useMemo(() => {
     const hw = FACADE_W / 2
@@ -58,19 +61,18 @@ export function Exterior() {
 
   return (
     <group>
-      <Stars radius={80} depth={30} count={1400} factor={3.2} saturation={0} fade speed={0} />
-      <Billboard position={[9, 22, -22]}>
+      <Billboard position={[9, 20, -24]}>
         <mesh raycast={() => null}>
-          <planeGeometry args={[7, 7]} />
-          <meshBasicMaterial map={moon} transparent depthWrite={false} fog={false} toneMapped={false} />
+          <planeGeometry args={[16, 16]} />
+          <meshBasicMaterial map={sunGlow} transparent depthWrite={false} fog={false} toneMapped={false} />
         </mesh>
       </Billboard>
-      <directionalLight position={[-40, 25, -20]} intensity={0.55} color="#cfe0d0" />
+      <directionalLight position={[-40, 30, -24]} intensity={1.5} color="#ffe2b0" />
 
       {/* garden ground, path and cypresses */}
       <mesh position={[0, -0.03, 0]} rotation={[-Math.PI / 2, 0, 0]}>
         <planeGeometry args={[240, 240]} />
-        <meshStandardMaterial color="#26331f" roughness={1} />
+        <meshStandardMaterial color="#5a6838" roughness={1} />
       </mesh>
       <mesh position={[-26, 0.004, 0]} rotation={[-Math.PI / 2, 0, 0]}>
         <planeGeometry args={[12.5, 3]} />
@@ -93,24 +95,24 @@ export function Exterior() {
         {/* stepped porch */}
         <mesh position={[0, PORCH / 4, 3.3]}>
           <boxGeometry args={[14.4, PORCH / 2, 6.6]} />
-          <meshStandardMaterial color={P.sand} roughness={0.9} />
+          <meshStandardMaterial map={stone} normalMap={stoneRelief} roughness={0.9} />
         </mesh>
         <mesh position={[0, (PORCH * 3) / 4, 3.0]}>
           <boxGeometry args={[13.8, PORCH / 2, 6.0]} />
-          <meshStandardMaterial color={P.marble} roughness={0.85} />
+          <meshStandardMaterial {...porch} roughness={1} color="#cfc3ab" />
         </mesh>
 
         {/* facade with the doorway cut out */}
-        <mesh geometry={geo.wall}>
-          <meshStandardMaterial map={stone} roughness={0.95} />
+        <mesh geometry={geo.wall} receiveShadow>
+          <meshStandardMaterial map={stone} normalMap={stoneRelief} roughness={0.92} />
         </mesh>
 
         {/* the arched door surround: terracotta jambs and a sunburst tympanum */}
-        <ArchNiche w={DOOR_W} spring={DOOR_H} apex={DOOR_H + 1.25} base={DOOR_H} tex="tympanum" band={0.22} frame={P.terra} position={[0, 0, 0.004]} />
+        <ArchNiche w={DOOR_W} spring={DOOR_H} apex={DOOR_H + 1.25} base={DOOR_H} tex="tympanum" band={0.22} frame={'#d8c8a6'} position={[0, 0, 0.004]} />
         {[-1, 1].map((s) => (
           <mesh key={s} position={[s * (DOOR_W / 2 + 0.11), DOOR_H / 2, 0.02]}>
             <boxGeometry args={[0.22, DOOR_H, 0.04]} />
-            <meshStandardMaterial color={P.terra} roughness={0.8} />
+            <meshStandardMaterial color="#d8c8a6" normalMap={stoneRelief} roughness={0.8} />
           </mesh>
         ))}
         {[-1, 1].map((s) => (
@@ -119,7 +121,7 @@ export function Exterior() {
               <boxGeometry args={[0.05, 0.05, 0.36]} />
               <meshStandardMaterial color="#9a7432" metalness={0.7} roughness={0.35} />
             </mesh>
-            <Lantern intensity={16} distance={12} />
+            <Lantern intensity={7} distance={9} />
           </group>
         ))}
 
@@ -132,7 +134,7 @@ export function Exterior() {
         {/* pediment with the library's name */}
         <group position={[0, H, 0.15]}>
           <mesh geometry={geo.pediment}>
-            <meshStandardMaterial color={P.teal} roughness={0.85} />
+            <meshStandardMaterial color={P.verdigris} emissive={P.teal} emissiveIntensity={0.6} roughness={0.85} />
           </mesh>
           {[-1, 1].map((s) => (
             <mesh key={s} position={[(s * PED_W) / 4, PED_H / 2 + 0.05, 0.6]} rotation={[0, 0, -s * rake]}>

@@ -87,9 +87,9 @@ export function CameraRig() {
       // the side panel on wide screens, the bottom sheet on phones.
       const availW = wide ? clamp(1 - 640 / size.width, 0.4, 0.92) : 0.96
       const availH = wide ? 0.88 : 0.46
-      const totalH = shelfLayout.height + 1.15
+      const totalH = shelfLayout.height + 1.05
       const needW = shelfLayout.width + 0.6
-      const dist = Math.max(4.4, totalH / (2 * tanHalf * availH), needW / (2 * tanHalf * aspect * availW))
+      const dist = Math.max(2.8, totalH / (2 * tanHalf * availH), needW / (2 * tanHalf * aspect * availW))
 
       const visibleH = 2 * dist * tanHalf
       const ty = wide ? totalH / 2 : totalH / 2 - visibleH * 0.2

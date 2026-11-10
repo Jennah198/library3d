@@ -26,7 +26,7 @@ export const P = {
   lapis: '#2f5878',
   walnut: '#4f321d',
   walnutDark: '#2e1c10',
-  sky: '#1b2d29',
+  sky: '#d6c093',
 } as const
 
 type Rand = () => number
@@ -870,7 +870,23 @@ function moon() {
   return c
 }
 
+/** A low sun seen through golden mist. */
+function haze() {
+  const S = 512
+  const [c, g] = makeCanvas(S, S)
+  const glow = g.createRadialGradient(S / 2, S / 2, 0, S / 2, S / 2, S / 2)
+  glow.addColorStop(0, 'rgba(255, 246, 214, 1)')
+  glow.addColorStop(0.16, 'rgba(255, 236, 186, 0.95)')
+  glow.addColorStop(0.24, 'rgba(250, 214, 150, 0.45)')
+  glow.addColorStop(0.6, 'rgba(240, 200, 140, 0.12)')
+  glow.addColorStop(1, 'rgba(240, 200, 140, 0)')
+  g.fillStyle = glow
+  g.fillRect(0, 0, S, S)
+  return c
+}
+
 const MAKERS = {
+  haze,
   marble,
   fresco,
   niche,
@@ -900,6 +916,11 @@ function baseTexture(key: TexKey): THREE.CanvasTexture {
     base.set(key, t)
   }
   return t
+}
+
+/** The canvas behind a painted texture (for deriving relief maps). */
+export function artCanvas(key: TexKey): HTMLCanvasElement {
+  return baseTexture(key).image as HTMLCanvasElement
 }
 
 /** A painted texture with its own repeat / offset. The pixels are drawn once and shared. */

@@ -4,8 +4,10 @@ import { personalId, useStore, type ShelfLayout } from '../store'
 import { Bookcase, caseHeight, levelsFor } from './Bookcase'
 import { CASE_W, MAX_COLLECTIONS, STUDY, studySlots } from './constants'
 import { Label3D } from './Label3D'
-import { ArchNiche, Entablature, Lantern, Planter } from './Architecture'
+import { ArchNiche, Entablature, Planter } from './Architecture'
 import { P, useTex } from './art'
+import { CofferBeams, Oculus } from './Ceiling'
+import { usePBR, useRelief } from './pbr'
 
 const W = STUDY.maxX - STUDY.minX
 const D = STUDY.maxZ - STUDY.minZ
@@ -17,9 +19,11 @@ const WALL_REPEAT_Y = H / 6.5
 export function PersonalRoom() {
   const library = useStore((s) => s.library)
   const setLayout = useStore((s) => s.setLayout)
-  const floor = useTex('marble', W / 4, D / 4)
+  const floor = usePBR('marbleFloor', W / 4, D / 4)
   const ceiling = useTex('coffer', W / 2.6, D / 2.6)
   const rug = useTex('medallion')
+  const rugRelief = useRelief('medallion', 4)
+  const plaster = usePBR('plaster', 6, 3)
   const longWall = useTex('fresco', (W + T * 2) / 6, WALL_REPEAT_Y)
   const endWall = useTex('fresco', D / 6, WALL_REPEAT_Y)
 
@@ -59,35 +63,37 @@ export function PersonalRoom() {
   return (
     <group>
       <fog attach="fog" args={[P.sky, 18, 60]} />
-      <ambientLight intensity={0.6} color="#ffe2b8" />
-      <hemisphereLight args={['#ffe2b0', '#2a3a30', 0.6]} />
+      <ambientLight intensity={0.12} color="#ffe2b8" />
+      <hemisphereLight args={['#ffe2b0', '#3a2a1a', 0.3]} />
 
-      <mesh rotation={[-Math.PI / 2, 0, 0]}>
+      <mesh rotation={[-Math.PI / 2, 0, 0]} receiveShadow>
         <planeGeometry args={[W, D]} />
-        <meshStandardMaterial map={floor} roughness={0.55} />
+        <meshStandardMaterial {...floor} roughness={1} />
       </mesh>
       <mesh position={[0, H, 0]} rotation={[Math.PI / 2, 0, 0]}>
         <planeGeometry args={[W, D]} />
-        <meshStandardMaterial map={ceiling} roughness={0.9} />
+        <meshStandardMaterial map={ceiling} roughness={0.85} />
       </mesh>
-      <mesh position={[0, 0.012, 0]} rotation={[-Math.PI / 2, 0, 0]}>
+      <CofferBeams minX={STUDY.minX} maxX={STUDY.maxX} minZ={STUDY.minZ} maxZ={STUDY.maxZ} y={H} step={2.6} />
+      <Oculus y={H} radius={1.4} />
+      <mesh position={[0, 0.004, 0]} rotation={[-Math.PI / 2, 0, 0]} receiveShadow>
         <circleGeometry args={[2.4, 64]} />
-        <meshStandardMaterial map={rug} roughness={0.8} />
+        <meshStandardMaterial map={rug} normalMap={rugRelief} roughness={0.55} />
       </mesh>
 
       {/* walls */}
       <mesh position={[0, H / 2, STUDY.minZ - T / 2]}>
         <boxGeometry args={[W + T * 2, H, T]} />
-        <meshStandardMaterial map={longWall} roughness={0.95} />
+        <meshStandardMaterial map={longWall} normalMap={plaster.normalMap} roughnessMap={plaster.roughnessMap} roughness={1} />
       </mesh>
       <mesh position={[0, H / 2, STUDY.maxZ + T / 2]}>
         <boxGeometry args={[W + T * 2, H, T]} />
-        <meshStandardMaterial map={longWall} roughness={0.95} />
+        <meshStandardMaterial map={longWall} normalMap={plaster.normalMap} roughnessMap={plaster.roughnessMap} roughness={1} />
       </mesh>
       {[-1, 1].map((side) => (
         <mesh key={side} position={[side * (W / 2 + T / 2), H / 2, 0]}>
           <boxGeometry args={[T, H, D]} />
-          <meshStandardMaterial map={endWall} roughness={0.95} />
+          <meshStandardMaterial map={endWall} normalMap={plaster.normalMap} roughnessMap={plaster.roughnessMap} roughness={1} />
         </mesh>
       ))}
       <Entablature length={W} height={0.5} position={[0, H - 0.25, STUDY.minZ]} />
@@ -100,7 +106,6 @@ export function PersonalRoom() {
       <ArchNiche w={3.6} spring={3.3} apex={5.0} base={1.1} position={[STUDY.minX + 0.004, 0, 0]} rotation={[0, Math.PI / 2, 0]} />
       <Planter seed={5} position={[STUDY.maxX - 0.8, 0, 2.7]} />
       <Planter seed={6} position={[STUDY.maxX - 0.8, 0, -2.7]} />
-      <Lantern position={[0, H - 1.6, 0]} chain={1.18} intensity={22} distance={14} />
 
       {/* reading desk with a lamp, against the west wall */}
       <group position={[-6.1, 0, 0]} rotation={[0, Math.PI / 2, 0]}>
