@@ -39,7 +39,7 @@ export function AuthModal() {
 
   return (
     <div className="modal-backdrop" onPointerDown={(e) => e.target === e.currentTarget && setAuthOpen(false)}>
-      <form className="modal" onSubmit={submit} role="dialog" aria-modal="true" aria-labelledby="auth-title">
+      <form className="modal gilded" onSubmit={submit} role="dialog" aria-modal="true" aria-labelledby="auth-title">
         <h2 id="auth-title">{mode === 'login' ? 'Sign in' : 'Create your library card'}</h2>
         <p className="muted">
           {pending ? <>Sign in to save <b dir="auto">{pending.title}</b> to your personal library.</> : 'Your personal library keeps the books you save.'}

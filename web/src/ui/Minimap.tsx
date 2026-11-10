@@ -25,7 +25,7 @@ export function Minimap() {
       : library.filter((i) => `my:${i.collection}` === slug).length
 
   return (
-    <aside className={`map ornate ${open ? 'open' : ''}`} aria-label="Floor plan and catalogue">
+    <aside className={`map ${open ? 'open' : ''}`} aria-label="Floor plan and catalogue">
       <button className="map-head" onClick={() => setMapOpen(!open)} aria-expanded={open}>
         <span>{room === 'public' ? 'Map & catalogue' : 'My study'}</span>
         <span aria-hidden>{open ? '–' : '+'}</span>

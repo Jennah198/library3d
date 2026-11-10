@@ -11,7 +11,7 @@ export function DoorHint() {
   const { openDoor, setView, loadShelves } = useStore.getState()
   if (phase !== 'door') return null
   return (
-    <div className={`door-hint ${doorOpen ? 'gone' : ''}`}>
+    <div className={`door-hint gilded ${doorOpen ? 'gone' : ''}`}>
       <Emblem size={40} className="door-emblem" />
       <h1>Library</h1>
       <p className="door-names">

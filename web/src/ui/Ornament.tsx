@@ -17,15 +17,13 @@ export function Emblem({ size = 28, className }: { size?: number; className?: st
   )
 }
 
-/** A whiplash divider: two curling stems meeting at a lozenge. */
+/** A double rule broken by three fleurons, as in an old printed book. */
 export function Flourish({ className }: { className?: string }) {
   return (
-    <svg className={className} width="220" height="18" viewBox="0 0 220 18" aria-hidden fill="none" stroke="currentColor" strokeLinecap="round">
-      <path d="M4 9h70c10 0 14-6 8-7.5S72 4 78 9s14 0 20 0" strokeWidth="1.2" />
-      <path d="M216 9h-70c-10 0-14-6-8-7.5S148 4 142 9s-14 0-20 0" strokeWidth="1.2" />
-      <path d="M110 3l6 6l-6 6l-6-6z" fill="currentColor" stroke="none" />
-      <circle cx="98" cy="9" r="1.6" fill="currentColor" stroke="none" />
-      <circle cx="122" cy="9" r="1.6" fill="currentColor" stroke="none" />
-    </svg>
+    <span className={`fleurons ${className ?? ''}`} aria-hidden>
+      <span className="fleurons-rule" />
+      <span className="fleurons-mark">❦ · ❦ · ❦</span>
+      <span className="fleurons-rule" />
+    </span>
   )
 }

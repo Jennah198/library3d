@@ -26,7 +26,7 @@ export function BookCard() {
   const saved = Boolean(item)
 
   return (
-    <section className="card ornate" aria-label="Book details">
+    <section className="card" aria-label="Book details">
       <button className="icon close" aria-label="Close details" onClick={() => selectBook(null)}>
         ×
       </button>

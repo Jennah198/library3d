@@ -53,7 +53,6 @@ export default function App() {
   return (
     <div className={`app ${hasCard ? 'has-card' : ''} ${hasShelf ? 'has-shelf' : ''}`}>
       {view === '3d' ? <Library3D /> : <ListView />}
-      {view === '3d' && <div className="paper" aria-hidden />}
       <TopBar />
       {view === '3d' && (
         <>

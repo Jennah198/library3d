@@ -12,10 +12,16 @@ export function TopBar() {
   return (
     <header className="topbar">
       <div className="brand" aria-label="Library">
-        <Emblem size={26} className="brand-emblem" />
-        <span className="brand-name">Library</span>
-        <span className="brand-sub" lang="am">ቤተ መጻሕፍት</span>
-        <span className="brand-sub" lang="ar" dir="rtl">مكتبة</span>
+        <span className="brand-mark" aria-hidden>
+          <Emblem size={24} />
+        </span>
+        <span className="brand-text">
+          <span className="brand-name">Library</span>
+          <span className="brand-subs">
+            <span className="brand-sub" lang="am">ቤተ መጻሕፍት</span>
+            <span className="brand-sub" lang="ar" dir="rtl">مكتبة</span>
+          </span>
+        </span>
       </div>
 
       <SearchBox />

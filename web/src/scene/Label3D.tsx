@@ -11,12 +11,12 @@ import * as THREE from 'three'
 type Family = 'serif' | 'sans' | 'display'
 
 const FAMILY: Record<Family, string> = {
-  serif: '"Cormorant Garamond","Noto Sans Ethiopic","Noto Naskh Arabic",Georgia,serif',
-  sans: '"Inter","Noto Sans Ethiopic","Noto Naskh Arabic",system-ui,sans-serif',
-  display: '"Cinzel","Cormorant Garamond","Noto Sans Ethiopic","Noto Naskh Arabic",Georgia,serif',
+  serif: '"Cormorant Garamond","Noto Sans Ethiopic","Amiri",Georgia,serif',
+  sans: '"IM Fell English","Noto Sans Ethiopic","Amiri",Georgia,serif',
+  display: '"IM Fell English SC","Cormorant Garamond","Noto Sans Ethiopic","Amiri",Georgia,serif',
 }
 const RTL = /[֐-ࣿיִ-﷿ﹰ-﻿]/
-const WEIGHT = 600
+const WEIGHT = 400
 
 interface Spec {
   text: string

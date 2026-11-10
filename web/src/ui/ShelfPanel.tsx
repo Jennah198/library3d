@@ -38,7 +38,7 @@ export function ShelfPanel() {
   if (!active || !title) return null
 
   return (
-    <aside className="panel shelf-panel ornate" aria-label={`${title} shelf`}>
+    <aside className="panel shelf-panel" aria-label={`${title} shelf`}>
       <header className="panel-head">
         <div>
           <h2>{title}</h2>
